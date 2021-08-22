@@ -57,7 +57,12 @@ namespace Grader.Api.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        /// <summary>
+        /// Create a new category
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Authorize(Policy =PolicyNames.ADMIN)]
         [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -68,7 +73,13 @@ namespace Grader.Api.Controllers
             return Created(new Uri($"/category/{result.Id}", UriKind.Relative), result);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.ADMIN)]
+        /// <summary>
+        /// Update a category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Authorize(Policy = PolicyNames.ADMIN)]
         [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -80,6 +91,12 @@ namespace Grader.Api.Controllers
             return Accepted(new Uri($"/category/{result.Id}", UriKind.Relative), result);
         }
 
+        /// <summary>
+        /// Delete a category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Policy = PolicyNames.ADMIN)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]

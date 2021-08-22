@@ -1,7 +1,4 @@
-﻿using AutoFixture;
-using Grader.Api.Business.Commands.CategoryCreate;
-using NUnit.Framework;
-using System.Threading;
+﻿using NUnit.Framework;
 
 namespace Grader.Api.Business.Test.Commands
 {
@@ -13,7 +10,7 @@ namespace Grader.Api.Business.Test.Commands
             CreateMockDbContext();
         }
 
-        [Test]
+        //[Test]
         //public void When_Handle()
         //{
         //    // assign

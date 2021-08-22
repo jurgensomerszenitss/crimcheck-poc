@@ -16,6 +16,8 @@ using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using System.Reflection;
 
 namespace Grader.Api
 {
@@ -32,6 +34,7 @@ namespace Grader.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddRouting(options => { options.LowercaseUrls = true; options.LowercaseQueryStrings = true;  });
             services.AddControllers().AddNewtonsoftJson(ConfigureNewtonsoft);
             services.AddMediatR(typeof(Startup), typeof(Bootstrapper));
             services.AddSwaggerGen(ConfigureSwagger);
@@ -73,11 +76,15 @@ namespace Grader.Api
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "Grader.Api", Version = "v1" });
 
-            options.SchemaFilter<SwaggerExcludeFilter>();
+            options.SchemaFilter<SwaggerExcludeFilter>();            
+            options.SchemaFilter<JsonIgnoreBodyOperationFilter>();
+            options.SchemaFilter<RequireValueTypePropertiesSchemaFilter>(true);
             options.OperationFilter<JsonIgnoreQueryOperationFilter>();
-            options.SchemaFilter<JsonIgnoreBodyOperationFilter>();            
             options.OperationFilter<RemoveTagPrefixOperationFilter>();
             options.MapType<FileStreamResult>(() => new OpenApiSchema { Type = "file", });
+            
+            var xmlPath = Path.Combine(System.AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+            options.IncludeXmlComments(xmlPath);
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
