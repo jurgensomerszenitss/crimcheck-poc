@@ -51,7 +51,7 @@ namespace Grader.Api.Data.Context
                 }
 
             }
-            catch (Exception exc)
+            catch
             {
                 //Log.Fatal(exc, "Database migration failed");
             }

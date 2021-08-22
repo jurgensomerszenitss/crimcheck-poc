@@ -21,6 +21,7 @@ namespace Grader.Api.Data.ModelBuilders
         private static EntityTypeBuilder<Category> MapProperties(this EntityTypeBuilder<Category> entityTypeBuilder)
         {
             entityTypeBuilder.Property(p => p.Name).IsRequired().HasMaxLength(100);
+            entityTypeBuilder.Property(p => p.SearchText).ValueGeneratedOnAdd();
 
             return entityTypeBuilder;
         }

@@ -1,6 +1,12 @@
-﻿using Grader.Api.Business.Queries.CategorySearch;
+﻿using Grader.Api.Business.Commands.CategoryCreate;
+using Grader.Api.Business.Commands.CategoryDelete;
+using Grader.Api.Business.Commands.CategoryUpdate;
+using Grader.Api.Business.Enums;
+using Grader.Api.Business.Queries.CategoryGet;
+using Grader.Api.Business.Queries.CategorySearch;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -19,17 +25,72 @@ namespace Grader.Api.Controllers
         private readonly IMediator _mediator;
 
         /// <summary>
-        /// Searches a list of courses
+        /// Searches a list of categories
         /// </summary>
         /// <returns></returns>
         [ProducesResponseType(typeof(CategorySearchQueryResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] CategorySearchQueryRequest request)
+        public async Task<IActionResult> SearchAsync([FromQuery] CategorySearchQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a category
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(CategorySearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("{id:long}")]
+        public async Task<IActionResult> GetAsync([FromRoute] long id)
+        {
+            var request = new CategoryGetQuery { Id = id };
+            var result = await _mediator.Send(request);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+        [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] CategoryCreateCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return Created(new Uri($"/category/{result.Id}", UriKind.Relative), result);
+        }
+
+        [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("{id:long}")]
+        public async Task<IActionResult> CreateAsync([FromRoute] long id, [FromBody] CategoryUpdateCommand request)
+        {
+            request.Id = id;
+            var result = await _mediator.Send(request);
+            return Accepted(new Uri($"/category/{result.Id}", UriKind.Relative), result);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpDelete("{id:long}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] long id)
+        {
+            var request = new CategoryDeleteCommand { Id = id };
+            var result = await _mediator.Send(request);
+            switch(result.Result)
+            {
+                case DeleteCommandResult.NotAllowed: return Forbid();
+                case DeleteCommandResult.NotFound: return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

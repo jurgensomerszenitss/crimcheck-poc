@@ -17,5 +17,12 @@ namespace Grader.Api.Data.QueryBuilders
             var searchExpression = string.Join(" & ", searchParts.Select(x => $"{x}:*"));
             return query.Where(q => q.SearchText.Matches(EF.Functions.ToTsQuery(searchExpression)));
         }
+
+        public static IQueryable<Category> WhereId(this IQueryable<Category> query, long? id)
+        {
+            if (!id.HasValue) return query;
+
+            return query.Where(x => x.Id == id);
+        }
     }
 }

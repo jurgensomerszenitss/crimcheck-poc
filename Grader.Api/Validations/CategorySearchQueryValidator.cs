@@ -3,9 +3,9 @@ using Grader.Api.Business.Queries.CategorySearch;
 
 namespace Grader.Api.Validations
 {
-    public class CategorySearchQueryRequestValidator : AbstractValidator<CategorySearchQueryRequest>
+    public class CategorySearchQueryValidator : AbstractValidator<CategorySearchQueryRequest>
     {
-        public CategorySearchQueryRequestValidator()
+        public CategorySearchQueryValidator()
         {
             RuleFor(x => x.Page).GreaterThan(0).WithMessage("Page has to be greater than 0");
             RuleFor(x => x.PageSize).GreaterThan(0).WithMessage("PageSize has to be greater than 0");
