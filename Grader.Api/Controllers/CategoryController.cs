@@ -35,7 +35,7 @@ namespace Grader.Api.Controllers
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> SearchAsync([FromQuery] CategorySearchQueryRequest request)
+        public async Task<IActionResult> SearchAsync([FromQuery] CategorySearchQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -80,7 +80,7 @@ namespace Grader.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType(typeof(CategoryUpdateCommandResult), (int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id:long}")]

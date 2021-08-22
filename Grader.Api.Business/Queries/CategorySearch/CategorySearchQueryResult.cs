@@ -6,6 +6,6 @@ namespace Grader.Api.Business.Queries.CategorySearch
     {
         public ICollection<CategorySearchQueryResultCategory> Items { get; set; }
         public int TotalCount { get; set; }
-        public CategorySearchQueryRequest Request{ get; set; }
+        public CategorySearchQuery Request{ get; set; }
     }
 }

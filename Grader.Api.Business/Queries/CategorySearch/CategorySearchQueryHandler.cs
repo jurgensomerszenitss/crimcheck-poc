@@ -12,7 +12,7 @@ using Mapster;
 
 namespace Grader.Api.Business.Queries.CategorySearch
 {
-    public class CategorySearchQueryHandler : IRequestHandler<CategorySearchQueryRequest, CategorySearchQueryResult>
+    public class CategorySearchQueryHandler : IRequestHandler<CategorySearchQuery, CategorySearchQueryResult>
     {
         public CategorySearchQueryHandler(GraderDbContext dbContext)
         {
@@ -21,7 +21,7 @@ namespace Grader.Api.Business.Queries.CategorySearch
 
         private readonly GraderDbContext _dbContext;
 
-        public async Task<CategorySearchQueryResult> Handle(CategorySearchQueryRequest request, CancellationToken cancellationToken)
+        public async Task<CategorySearchQueryResult> Handle(CategorySearchQuery request, CancellationToken cancellationToken)
         {
             var items = await GetItemsAsync(request);
             var count = await GetCountAsync(request);
@@ -29,7 +29,7 @@ namespace Grader.Api.Business.Queries.CategorySearch
             return Map(request, items, count);
         }
 
-        private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQueryRequest request)
+        private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQuery request)
         {
             return await _dbContext.Categories
                     .WhereSearchText(request.SearchText)
@@ -37,14 +37,14 @@ namespace Grader.Api.Business.Queries.CategorySearch
                     .ToListAsync();
         }
 
-        private async Task<int> GetCountAsync(CategorySearchQueryRequest request)
+        private async Task<int> GetCountAsync(CategorySearchQuery request)
         {
             return await _dbContext.Categories
                 .WhereSearchText(request.SearchText)
                 .CountAsync();
         }
 
-        private CategorySearchQueryResult Map(CategorySearchQueryRequest request, IEnumerable<Category> items, int count)
+        private CategorySearchQueryResult Map(CategorySearchQuery request, IEnumerable<Category> items, int count)
         {
             return new CategorySearchQueryResult
             {

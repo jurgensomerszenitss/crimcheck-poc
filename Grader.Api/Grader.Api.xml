@@ -4,7 +4,7 @@
         <name>Grader.Api</name>
     </assembly>
     <members>
-        <member name="M:Grader.Api.Controllers.CategoryController.SearchAsync(Grader.Api.Business.Queries.CategorySearch.CategorySearchQueryRequest)">
+        <member name="M:Grader.Api.Controllers.CategoryController.SearchAsync(Grader.Api.Business.Queries.CategorySearch.CategorySearchQuery)">
             <summary>
             Searches a list of categories
             </summary>
@@ -34,6 +34,48 @@
         <member name="M:Grader.Api.Controllers.CategoryController.DeleteAsync(System.Int64)">
             <summary>
             Delete a category
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.CourseController.SearchByCategoryAsync(System.Int64,Grader.Api.Business.Queries.CourseSearch.CourseSearchQuery)">
+            <summary>
+            Searches a list of courses for a category
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.CourseController.SearchAsync(Grader.Api.Business.Queries.CourseSearch.CourseSearchQuery)">
+            <summary>
+            Searches a list of courses
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.CourseController.GetAsync(System.Int64)">
+            <summary>
+            Get a course
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.CourseController.CreateAsync(System.Int64,Grader.Api.Business.Commands.CourseCreate.CourseCreateCommand)">
+            <summary>
+            Create a new course
+            </summary>
+            <param name="request"></param>
+            <param name="categoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.CourseController.UpdateAsync(System.Int64,System.Int64,Grader.Api.Business.Commands.CourseUpdate.CourseUpdateCommand)">
+            <summary>
+            Update a course
+            </summary>
+            <param name="id"></param>
+            <param name="categoryId"></param>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.CourseController.DeleteAsync(System.Int64)">
+            <summary>
+            Delete a course
             </summary>
             <param name="id"></param>
             <returns></returns>
