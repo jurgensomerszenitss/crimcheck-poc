@@ -42,18 +42,11 @@ namespace Grader.Api.Data.Context
                 var pendingMigrations = Database.GetPendingMigrations();
                 if (pendingMigrations.Any())
                 {
-                    //pendingMigrations.ToList().ForEach(m => Log.Information("Applying database migration {0}", m));
                     Database.Migrate();
                 }
-                else
-                {
-                    //Log.Information("No migrations needed, database is up to date");
-                }
-
             }
             catch
             {
-                //Log.Fatal(exc, "Database migration failed");
             }
 
 #endif

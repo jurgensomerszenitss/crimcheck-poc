@@ -21,16 +21,10 @@ namespace Grader.Api.Infrastructure
                         .Attributes.PropertyAttributes
                         ?.Any(x => x is JsonIgnoreAttribute);
 
-                    if (toIgnore ?? false)
-                    {
-                        var toRemove = operation.Parameters.SingleOrDefault(p => p.Name == param.Name);
-                        operation.Parameters.Remove(toRemove);
-                    }
-                    else
-                    {
-                        var toRemove = operation.Parameters.SingleOrDefault(p => p.Name == param.Name);
-                        operation.Parameters.Remove(toRemove);
-                    }
+
+                    var toRemove = operation.Parameters.SingleOrDefault(p => p.Name == param.Name);
+                    operation.Parameters.Remove(toRemove);
+
                 });
         }
     } 

@@ -78,7 +78,6 @@ namespace Grader.Api
 
             options.SchemaFilter<SwaggerExcludeFilter>();            
             options.SchemaFilter<JsonIgnoreBodyOperationFilter>();
-            options.SchemaFilter<RequireValueTypePropertiesSchemaFilter>(true);
             options.OperationFilter<JsonIgnoreQueryOperationFilter>();
             options.OperationFilter<RemoveTagPrefixOperationFilter>();
             options.MapType<FileStreamResult>(() => new OpenApiSchema { Type = "file", });
@@ -136,28 +135,7 @@ namespace Grader.Api
                     var jwt = new JwtSecurityToken(token);
                     return jwt;
                 },
-            };
-
-            //options.Events = new JwtBearerEvents
-            //{
-            //    OnTokenValidated = async ctx =>
-            //    {
-
-            //    },
-            //    OnAuthenticationFailed = async ctx =>
-            //    {
-            //        //LogHelper.LogWarning($"Authentication attempt failed");
-            //        await Task.Yield();
-            //    },
-            //    OnChallenge = async ctx =>
-            //    {
-
-            //    },
-            //    OnForbidden = async ctx =>
-            //    {
-
-            //    }
-            //};
+            }; 
         }
     }
 }

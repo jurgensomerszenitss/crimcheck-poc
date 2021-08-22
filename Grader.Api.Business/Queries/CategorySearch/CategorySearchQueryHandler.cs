@@ -39,7 +39,9 @@ namespace Grader.Api.Business.Queries.CategorySearch
 
         private async Task<int> GetCountAsync(CategorySearchQueryRequest request)
         {
-            return await _dbContext.Categories.CountAsync();
+            return await _dbContext.Categories
+                .WhereSearchText(request.SearchText)
+                .CountAsync();
         }
 
         private CategorySearchQueryResult Map(CategorySearchQueryRequest request, IEnumerable<Category> items, int count)

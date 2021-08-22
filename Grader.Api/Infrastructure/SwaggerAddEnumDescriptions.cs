@@ -64,7 +64,7 @@ namespace Grader.Api.Infrastructure
 
             foreach (var enumOption in enums)
             {
-                int enumInt = 0;// enumOption.Value;
+                int enumInt = 0;
 
                 enumDescriptions.Add(string.Format("{0} = {1}", enumInt, Enum.GetName(enumType, enumInt)));
             }
