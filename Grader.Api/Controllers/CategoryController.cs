@@ -4,7 +4,10 @@ using Grader.Api.Business.Commands.CategoryUpdate;
 using Grader.Api.Business.Enums;
 using Grader.Api.Business.Queries.CategoryGet;
 using Grader.Api.Business.Queries.CategorySearch;
+using Grader.Api.Policies;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
@@ -54,6 +57,7 @@ namespace Grader.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -64,11 +68,12 @@ namespace Grader.Api.Controllers
             return Created(new Uri($"/category/{result.Id}", UriKind.Relative), result);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = PolicyNames.ADMIN)]
         [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id:long}")]
-        public async Task<IActionResult> CreateAsync([FromRoute] long id, [FromBody] CategoryUpdateCommand request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] CategoryUpdateCommand request)
         {
             request.Id = id;
             var result = await _mediator.Send(request);

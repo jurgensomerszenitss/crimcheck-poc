@@ -13,7 +13,7 @@ namespace Grader.Api.Business.Test.Commands
             CreateMockDbContext();
         }
 
-        //[Test]
+        [Test]
         //public void When_Handle()
         //{
         //    // assign

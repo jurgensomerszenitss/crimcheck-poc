@@ -1,8 +1,11 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Grader.Api.Data.Context;
+using Grader.Api.Data.Model;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Grader.Api.Business.Test
@@ -35,5 +38,6 @@ namespace Grader.Api.Business.Test
             DbContext = context;
             return context;
         }
-    }
+
+    }    
 }

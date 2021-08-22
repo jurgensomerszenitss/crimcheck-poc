@@ -18,12 +18,19 @@ namespace Grader.Api.Business.Commands.CategoryCreate
 
         public async Task<CategoryCreateCommandResult> Handle(CategoryCreateCommand request, CancellationToken cancellationToken)
         {
-            var entity = request.Adapt<Category>();
+            try
+            {
+                var entity = request.Adapt<Category>();
 
-            _dbContext.Categories.Add(entity);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Categories.Add(entity);
+                await _dbContext.SaveChangesAsync();
 
-            return entity.Adapt<CategoryCreateCommandResult>();
+                return entity.Adapt<CategoryCreateCommandResult>();
+            }
+            catch(System.Exception exc)
+            {
+                return null;
+            }
         }
     }
 }

@@ -1,17 +1,21 @@
+using FluentValidation.AspNetCore;
+using Grader.Api.Business;
 using Grader.Api.Infrastructure;
+using Grader.Api.Policies;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
-using Grader.Api.Business;
-using FluentValidation.AspNetCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Grader.Api
 {
@@ -27,12 +31,15 @@ namespace Grader.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddControllers().AddNewtonsoftJson(ConfigureNewtonsoft);
             services.AddMediatR(typeof(Startup), typeof(Bootstrapper));
             services.AddSwaggerGen(ConfigureSwagger);
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddBusiness(Configuration);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(ConfigureJwt);
+            services.AddAuthorization(options => options.DefinePolicies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +55,7 @@ namespace Grader.Api
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -100,6 +108,49 @@ namespace Grader.Api
 
 
             options.CustomSchemaIds(i => i.Name);
+        }
+
+
+        private void ConfigureJwt(JwtBearerOptions options)
+        {
+            options.Authority = Configuration["Jwt:authority"];
+
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidIssuer = Configuration["Jwt:issuer"],
+
+                ValidateAudience = false,
+                ValidAudience = Configuration["Jwt:audience"],
+
+                ValidateLifetime = false,
+                SignatureValidator = delegate (string token, TokenValidationParameters parameters)
+                {
+                    var jwt = new JwtSecurityToken(token);
+                    return jwt;
+                },
+            };
+
+            //options.Events = new JwtBearerEvents
+            //{
+            //    OnTokenValidated = async ctx =>
+            //    {
+
+            //    },
+            //    OnAuthenticationFailed = async ctx =>
+            //    {
+            //        //LogHelper.LogWarning($"Authentication attempt failed");
+            //        await Task.Yield();
+            //    },
+            //    OnChallenge = async ctx =>
+            //    {
+
+            //    },
+            //    OnForbidden = async ctx =>
+            //    {
+
+            //    }
+            //};
         }
     }
 }
