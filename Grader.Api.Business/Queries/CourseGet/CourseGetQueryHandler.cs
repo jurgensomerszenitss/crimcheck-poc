@@ -19,7 +19,7 @@ namespace Grader.Api.Business.Queries.CourseGet
 
         public async Task<CourseGetQueryResult> Handle(CourseGetQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Courses.WhereId(request.Id).SingleOrDefaultAsync();
+            var entity = await _dbContext.Courses.WhereId(request.Id).SingleOrDefaultAsync(cancellationToken);
             if (entity == null) return null;
 
             return entity.Adapt<CourseGetQueryResult>();

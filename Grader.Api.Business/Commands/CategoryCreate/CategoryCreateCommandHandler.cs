@@ -22,7 +22,7 @@ namespace Grader.Api.Business.Commands.CategoryCreate
             var entity = request.Adapt<Category>();
 
             _dbContext.Categories.Add(entity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return entity.Adapt<CategoryCreateCommandResult>();
 

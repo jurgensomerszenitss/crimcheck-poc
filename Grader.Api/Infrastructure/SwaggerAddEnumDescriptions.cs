@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Grader.Api.Infrastructure
 {
@@ -18,7 +19,7 @@ namespace Grader.Api.Infrastructure
                 IList<IOpenApiAny> propertyEnums = property.Value.Enum;
                 if (propertyEnums != null && propertyEnums.Count > 0)
                 {
-                    property.Value.Description += DescribeEnum(propertyEnums, property.Key);
+                    property.Value.Description = DescribeEnum(propertyEnums, property.Key);
                 }
             }
 
@@ -29,7 +30,7 @@ namespace Grader.Api.Infrastructure
             }
         }
 
-        private void DescribeEnumParameters(IDictionary<OperationType, OpenApiOperation> operations, OpenApiDocument swaggerDoc)
+        private static void DescribeEnumParameters(IDictionary<OperationType, OpenApiOperation> operations, OpenApiDocument swaggerDoc)
         {
             if (operations != null)
             {
@@ -40,14 +41,14 @@ namespace Grader.Api.Infrastructure
                         var paramEnum = swaggerDoc.Components.Schemas.FirstOrDefault(x => x.Key == param.Name);
                         if (paramEnum.Value != null)
                         {
-                            param.Description += DescribeEnum(paramEnum.Value.Enum, paramEnum.Key);
+                            param.Description = DescribeEnum(paramEnum.Value.Enum, paramEnum.Key);
                         }
                     }
                 }
             }
         }
 
-        private Type GetEnumTypeByName(string enumTypeName)
+        private static Type GetEnumTypeByName(string enumTypeName)
         {
             return AppDomain.CurrentDomain
                 .GetAssemblies()
@@ -55,7 +56,7 @@ namespace Grader.Api.Infrastructure
                 .FirstOrDefault(x => x.Name == enumTypeName);
         }
 
-        private string DescribeEnum(IList<IOpenApiAny> enums, string proprtyTypeName)
+        private static string DescribeEnum(IList<IOpenApiAny> enums, string proprtyTypeName)
         {
             List<string> enumDescriptions = new List<string>();
             var enumType = GetEnumTypeByName(proprtyTypeName);

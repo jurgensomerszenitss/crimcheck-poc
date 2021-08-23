@@ -23,28 +23,28 @@ namespace Grader.Api.Business.Queries.CategorySearch
 
         public async Task<CategorySearchQueryResult> Handle(CategorySearchQuery request, CancellationToken cancellationToken)
         {
-            var items = await GetItemsAsync(request);
-            var count = await GetCountAsync(request);
+            var items = await GetItemsAsync(request, cancellationToken);
+            var count = await GetCountAsync(request, cancellationToken);
 
             return Map(request, items, count);
         }
 
-        private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQuery request)
+        private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQuery request, CancellationToken cancellationToken)
         {
             return await _dbContext.Categories
                     .WhereSearchText(request.SearchText)
                     .Page(request.Page, request.PageSize)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
         }
 
-        private async Task<int> GetCountAsync(CategorySearchQuery request)
+        private async Task<int> GetCountAsync(CategorySearchQuery request, CancellationToken cancellationToken)
         {
             return await _dbContext.Categories
                 .WhereSearchText(request.SearchText)
-                .CountAsync();
+                .CountAsync(cancellationToken);
         }
 
-        private CategorySearchQueryResult Map(CategorySearchQuery request, IEnumerable<Category> items, int count)
+        private static CategorySearchQueryResult Map(CategorySearchQuery request, IEnumerable<Category> items, int count)
         {
             return new CategorySearchQueryResult
             {

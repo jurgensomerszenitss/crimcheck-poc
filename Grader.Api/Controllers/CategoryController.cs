@@ -6,7 +6,6 @@ using Grader.Api.Business.Queries.CategoryGet;
 using Grader.Api.Business.Queries.CategorySearch;
 using Grader.Api.Policies;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,8 +30,8 @@ namespace Grader.Api.Controllers
         /// Searches a list of categories
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CategorySearchQueryResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(CategorySearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
         public async Task<IActionResult> SearchAsync([FromQuery] CategorySearchQuery request)
@@ -62,7 +61,7 @@ namespace Grader.Api.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Authorize(Policy =PolicyNames.ADMIN)]
+        [Authorize(Policy = PolicyNames.ADMIN)]
         [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -106,7 +105,7 @@ namespace Grader.Api.Controllers
         {
             var request = new CategoryDeleteCommand { Id = id };
             var result = await _mediator.Send(request);
-            switch(result.Result)
+            switch (result.Result)
             {
                 case DeleteCommandResult.NotAllowed: return Forbid();
                 case DeleteCommandResult.NotFound: return NotFound();

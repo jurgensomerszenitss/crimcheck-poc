@@ -8,6 +8,7 @@ using Grader.Api.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -34,9 +35,9 @@ namespace Grader.Api.Controllers
         [HttpGet("category/{categoryId:long}/course")]
         public async Task<IActionResult> SearchByCategoryAsync([FromRoute] long categoryId, [FromQuery] CourseSearchQuery request)
         {
-            request.CategoryId = categoryId;
-            var result = await _mediator.Send(request);
-            return Ok(result);
+                request.CategoryId = categoryId;
+                var result = await _mediator.Send(request);
+                return Ok(result);           
         }
 
         /// <summary>

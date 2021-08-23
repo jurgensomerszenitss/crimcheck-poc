@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -34,6 +35,7 @@ namespace Grader.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddMvc(options => { options.Filters.Add<LogExceptionFilter>(); });
             services.AddRouting(options => { options.LowercaseUrls = true; options.LowercaseQueryStrings = true;  });
             services.AddControllers().AddNewtonsoftJson(ConfigureNewtonsoft);
             services.AddMediatR(typeof(Startup), typeof(Bootstrapper));
@@ -136,6 +138,7 @@ namespace Grader.Api
                     return jwt;
                 },
             }; 
-        }
+        } 
+       
     }
 }

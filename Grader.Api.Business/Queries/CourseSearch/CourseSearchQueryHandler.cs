@@ -22,30 +22,30 @@ namespace Grader.Api.Business.Queries.CourseSearch
 
         public async Task<CourseSearchQueryResult> Handle(CourseSearchQuery request, CancellationToken cancellationToken)
         {
-            var items = await GetItemsAsync(request);
-            var count = await GetCountAsync(request);
+            var items = await GetItemsAsync(request, cancellationToken);
+            var count = await GetCountAsync(request, cancellationToken);
 
             return Map(request, items, count);
         }
 
-        private async Task<IEnumerable<Course>> GetItemsAsync(CourseSearchQuery request)
+        private async Task<IEnumerable<Course>> GetItemsAsync(CourseSearchQuery request, CancellationToken cancellationToken)
         {
             return await _dbContext.Courses
                     .WhereSearchText(request.SearchText)
                     .WhereCategoryId(request.CategoryId)
                     .Page(request.Page, request.PageSize)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
         }
 
-        private async Task<int> GetCountAsync(CourseSearchQuery request)
+        private async Task<int> GetCountAsync(CourseSearchQuery request, CancellationToken cancellationToken)
         {
             return await _dbContext.Courses
                 .WhereSearchText(request.SearchText)
                 .WhereCategoryId(request.CategoryId)
-                .CountAsync();
+                .CountAsync(cancellationToken);
         }
 
-        private CourseSearchQueryResult Map(CourseSearchQuery request, IEnumerable<Course> items, int count)
+        private static CourseSearchQueryResult Map(CourseSearchQuery request, IEnumerable<Course> items, int count)
         {
             return new CourseSearchQueryResult
             {

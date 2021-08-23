@@ -19,7 +19,7 @@ namespace Grader.Api.Business.Queries.CategoryGet
 
         public async Task<CategoryGetQueryResult> Handle(CategoryGetQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Categories.WhereId(request.Id).SingleOrDefaultAsync();
+            var entity = await _dbContext.Categories.WhereId(request.Id).SingleOrDefaultAsync(cancellationToken);
             if (entity == null) return null;
 
             return entity.Adapt<CategoryGetQueryResult>();

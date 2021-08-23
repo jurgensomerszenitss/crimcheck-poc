@@ -30,7 +30,7 @@ namespace Grader.Api.Business.Commands.CourseUpdate
             entity.ActiveFrom = request.ActiveFrom;
             entity.ActiveTo = request.ActiveTo;
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return entity.Adapt<CourseUpdateCommandResult>();
         }

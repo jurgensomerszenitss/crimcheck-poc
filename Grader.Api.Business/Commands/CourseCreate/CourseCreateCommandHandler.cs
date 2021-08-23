@@ -22,7 +22,7 @@ namespace Grader.Api.Business.Commands.CourseCreate
             var entity = request.Adapt<Course>();
 
             _dbContext.Courses.Add(entity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return entity.Adapt<CourseCreateCommandResult>();
 
