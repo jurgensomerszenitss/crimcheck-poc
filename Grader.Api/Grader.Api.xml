@@ -80,5 +80,47 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Grader.Api.Controllers.LessonController.SearchByCourseAsync(System.Int64,Grader.Api.Business.Queries.LessonSearch.LessonSearchQuery)">
+            <summary>
+            Searches a list of lesons for a course
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.LessonController.SearchAsync(Grader.Api.Business.Queries.LessonSearch.LessonSearchQuery)">
+            <summary>
+            Searches a list of Lessons
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.LessonController.GetAsync(System.Int64)">
+            <summary>
+            Get a Lesson
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.LessonController.CreateAsync(System.Int64,Grader.Api.Business.Commands.LessonCreate.LessonCreateCommand)">
+            <summary>
+            Create a new Lesson
+            </summary>
+            <param name="request"></param>
+            <param name="courseId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.LessonController.UpdateAsync(System.Int64,System.Int64,Grader.Api.Business.Commands.LessonUpdate.LessonUpdateCommand)">
+            <summary>
+            Update a Lesson
+            </summary>
+            <param name="id"></param>
+            <param name="courseId"></param>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Grader.Api.Controllers.LessonController.DeleteAsync(System.Int64)">
+            <summary>
+            Delete a Lesson
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
