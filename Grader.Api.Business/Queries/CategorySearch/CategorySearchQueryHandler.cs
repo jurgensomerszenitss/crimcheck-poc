@@ -12,7 +12,7 @@ using Mapster;
 
 namespace Grader.Api.Business.Queries.CategorySearch
 {
-    public class CategorySearchQueryHandler : IRequestHandler<CategorySearchQueryRequest, CategorySearchQueryResult>
+    public class CategorySearchQueryHandler : IRequestHandler<CategorySearchQuery, CategorySearchQueryResult>
     {
         public CategorySearchQueryHandler(GraderDbContext dbContext)
         {
@@ -21,28 +21,30 @@ namespace Grader.Api.Business.Queries.CategorySearch
 
         private readonly GraderDbContext _dbContext;
 
-        public async Task<CategorySearchQueryResult> Handle(CategorySearchQueryRequest request, CancellationToken cancellationToken)
+        public async Task<CategorySearchQueryResult> Handle(CategorySearchQuery request, CancellationToken cancellationToken)
         {
-            var items = await GetItemsAsync(request);
-            var count = await GetCountAsync(request);
+            var items = await GetItemsAsync(request, cancellationToken);
+            var count = await GetCountAsync(request, cancellationToken);
 
             return Map(request, items, count);
         }
 
-        private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQueryRequest request)
+        private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQuery request, CancellationToken cancellationToken)
         {
             return await _dbContext.Categories
                     .WhereSearchText(request.SearchText)
                     .Page(request.Page, request.PageSize)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
         }
 
-        private async Task<int> GetCountAsync(CategorySearchQueryRequest request)
+        private async Task<int> GetCountAsync(CategorySearchQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Categories.CountAsync();
+            return await _dbContext.Categories
+                .WhereSearchText(request.SearchText)
+                .CountAsync(cancellationToken);
         }
 
-        private CategorySearchQueryResult Map(CategorySearchQueryRequest request, IEnumerable<Category> items, int count)
+        private static CategorySearchQueryResult Map(CategorySearchQuery request, IEnumerable<Category> items, int count)
         {
             return new CategorySearchQueryResult
             {

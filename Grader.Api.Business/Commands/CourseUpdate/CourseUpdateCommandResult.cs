@@ -1,10 +1,10 @@
-﻿using NpgsqlTypes;
+﻿using Grader.Api.Business.Enums;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
-namespace Grader.Api.Data.Model
+namespace Grader.Api.Business.Commands.CourseUpdate
 {
-    public class Course
+    public class CourseUpdateCommandResult
     {
         public long Id { get; set; }
         public string Title { get; set; }
@@ -15,13 +15,10 @@ namespace Grader.Api.Data.Model
         public DateTime RegistrationTo { get; set; }
         public int MaxParticipants { get; set; }
         public int MinParticipants { get; set; }
-        
-        public NpgsqlTsVector SearchText { get; set; }
 
         public long CategoryId { get; set; }
 
-        public virtual Category Category { get; set; }
-
-        public virtual ICollection<Lesson> Lessons { get; set; }
+        [JsonIgnore]
+        public UpdateCommandResult Result { get; set; }
     }
 }

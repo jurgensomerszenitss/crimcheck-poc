@@ -20,12 +20,12 @@ namespace Grader.Api.Business.Commands.CategoryDelete
 
         public async Task<CategoryDeleteCommandResult> Handle(CategoryDeleteCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Categories.Include(x => x.Courses).WhereId(request.Id).SingleOrDefaultAsync();
+            var entity = await _dbContext.Categories.Include(x => x.Courses).WhereId(request.Id).SingleOrDefaultAsync(cancellationToken);
             if (entity == null) return new CategoryDeleteCommandResult { Result = DeleteCommandResult.NotFound };
             if (entity.Courses.Any()) return new CategoryDeleteCommandResult { Result = DeleteCommandResult.NotAllowed };
 
             _dbContext.Categories.Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return new CategoryDeleteCommandResult { Result = DeleteCommandResult.Ok };
         }

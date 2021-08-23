@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -34,6 +35,7 @@ namespace Grader.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddMvc(options => { options.Filters.Add<LogExceptionFilter>(); });
             services.AddRouting(options => { options.LowercaseUrls = true; options.LowercaseQueryStrings = true;  });
             services.AddControllers().AddNewtonsoftJson(ConfigureNewtonsoft);
             services.AddMediatR(typeof(Startup), typeof(Bootstrapper));
@@ -78,7 +80,6 @@ namespace Grader.Api
 
             options.SchemaFilter<SwaggerExcludeFilter>();            
             options.SchemaFilter<JsonIgnoreBodyOperationFilter>();
-            options.SchemaFilter<RequireValueTypePropertiesSchemaFilter>(true);
             options.OperationFilter<JsonIgnoreQueryOperationFilter>();
             options.OperationFilter<RemoveTagPrefixOperationFilter>();
             options.MapType<FileStreamResult>(() => new OpenApiSchema { Type = "file", });
@@ -136,28 +137,8 @@ namespace Grader.Api
                     var jwt = new JwtSecurityToken(token);
                     return jwt;
                 },
-            };
-
-            //options.Events = new JwtBearerEvents
-            //{
-            //    OnTokenValidated = async ctx =>
-            //    {
-
-            //    },
-            //    OnAuthenticationFailed = async ctx =>
-            //    {
-            //        //LogHelper.LogWarning($"Authentication attempt failed");
-            //        await Task.Yield();
-            //    },
-            //    OnChallenge = async ctx =>
-            //    {
-
-            //    },
-            //    OnForbidden = async ctx =>
-            //    {
-
-            //    }
-            //};
-        }
+            }; 
+        } 
+       
     }
 }

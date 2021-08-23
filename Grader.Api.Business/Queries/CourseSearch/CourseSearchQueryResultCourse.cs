@@ -1,10 +1,8 @@
-﻿using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
-namespace Grader.Api.Data.Model
+namespace Grader.Api.Business.Queries.CourseSearch
 {
-    public class Course
+    public class CourseSearchQueryResultCourse
     {
         public long Id { get; set; }
         public string Title { get; set; }
@@ -15,13 +13,6 @@ namespace Grader.Api.Data.Model
         public DateTime RegistrationTo { get; set; }
         public int MaxParticipants { get; set; }
         public int MinParticipants { get; set; }
-        
-        public NpgsqlTsVector SearchText { get; set; }
-
         public long CategoryId { get; set; }
-
-        public virtual Category Category { get; set; }
-
-        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

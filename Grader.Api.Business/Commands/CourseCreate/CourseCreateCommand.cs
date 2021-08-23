@@ -1,12 +1,11 @@
-﻿using NpgsqlTypes;
+﻿using MediatR;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
-namespace Grader.Api.Data.Model
+namespace Grader.Api.Business.Commands.CourseCreate
 {
-    public class Course
+    public class CourseCreateCommand : IRequest<CourseCreateCommandResult>
     {
-        public long Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime ActiveFrom { get; set; }
@@ -15,13 +14,8 @@ namespace Grader.Api.Data.Model
         public DateTime RegistrationTo { get; set; }
         public int MaxParticipants { get; set; }
         public int MinParticipants { get; set; }
-        
-        public NpgsqlTsVector SearchText { get; set; }
 
+        [JsonIgnore]
         public long CategoryId { get; set; }
-
-        public virtual Category Category { get; set; }
-
-        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

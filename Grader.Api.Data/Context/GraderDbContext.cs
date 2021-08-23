@@ -1,6 +1,9 @@
-﻿using Grader.Api.Data.Model;
+﻿using Grader.Api.Data.Infrastructure;
+using Grader.Api.Data.Model;
 using Grader.Api.Data.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Serilog;
 using System;
 using System.Linq;
 
@@ -31,7 +34,9 @@ namespace Grader.Api.Data.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSnakeCaseNamingConvention(); 
+            optionsBuilder.UseSnakeCaseNamingConvention();
+
+            optionsBuilder.ReplaceService<IMigrationsSqlGenerator, PostgresMigrationsGenerator>();
         }
 
         public void Verify()
@@ -42,18 +47,13 @@ namespace Grader.Api.Data.Context
                 var pendingMigrations = Database.GetPendingMigrations();
                 if (pendingMigrations.Any())
                 {
-                    //pendingMigrations.ToList().ForEach(m => Log.Information("Applying database migration {0}", m));
                     Database.Migrate();
+                    Log.Information("Database migrated");
                 }
-                else
-                {
-                    //Log.Information("No migrations needed, database is up to date");
-                }
-
             }
-            catch
+            catch(Exception exc)
             {
-                //Log.Fatal(exc, "Database migration failed");
+                Log.Error(exc, "Error migrating database");
             }
 
 #endif
