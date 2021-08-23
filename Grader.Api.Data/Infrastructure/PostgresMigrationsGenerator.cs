@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Grader.Api.Data.Infrastructure
 {
-    public class PostgresMigrationsGenerator : MigrationsSqlGenerator
+    public class PostgresMigrationsGenerator : NpgsqlMigrationsSqlGenerator
     {
-        public PostgresMigrationsGenerator([NotNullAttribute] MigrationsSqlGeneratorDependencies dependencies) : base(dependencies)
+        public PostgresMigrationsGenerator([NotNullAttribute] MigrationsSqlGeneratorDependencies dependencies, [NotNullAttribute] INpgsqlOptions npgsqlOptions) : base(dependencies, npgsqlOptions)
         {
         }
 

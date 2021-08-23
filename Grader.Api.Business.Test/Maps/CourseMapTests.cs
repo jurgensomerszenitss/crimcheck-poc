@@ -32,6 +32,8 @@ namespace Grader.Api.Business.Test.Maps
             Assert.AreEqual(input.Title, actual.Title);
             Assert.AreEqual(input.ActiveFrom, actual.ActiveFrom);
             Assert.AreEqual(input.ActiveTo, actual.ActiveTo);
+            Assert.AreEqual(input.RegistrationFrom, actual.RegistrationFrom);
+            Assert.AreEqual(input.RegistrationTo, actual.RegistrationTo);
             Assert.AreEqual(input.Description, actual.Description);
             Assert.AreEqual(input.CategoryId, actual.CategoryId);
         }
@@ -50,6 +52,8 @@ namespace Grader.Api.Business.Test.Maps
             Assert.AreEqual(input.Title, actual.Title);
             Assert.AreEqual(input.ActiveFrom, actual.ActiveFrom);
             Assert.AreEqual(input.ActiveTo, actual.ActiveTo);
+            Assert.AreEqual(input.RegistrationFrom, actual.RegistrationFrom);
+            Assert.AreEqual(input.RegistrationTo, actual.RegistrationTo);
             Assert.AreEqual(input.Description, actual.Description);
             Assert.AreEqual(input.CategoryId, actual.CategoryId);
         }
@@ -69,6 +73,8 @@ namespace Grader.Api.Business.Test.Maps
             Assert.AreEqual(input.Title, actual.Title);
             Assert.AreEqual(input.ActiveFrom, actual.ActiveFrom);
             Assert.AreEqual(input.ActiveTo, actual.ActiveTo);
+            Assert.AreEqual(input.RegistrationFrom, actual.RegistrationFrom);
+            Assert.AreEqual(input.RegistrationTo, actual.RegistrationTo);
             Assert.AreEqual(input.Description, actual.Description);
             Assert.AreEqual(input.CategoryId, actual.CategoryId);
         }
@@ -87,6 +93,8 @@ namespace Grader.Api.Business.Test.Maps
             Assert.AreEqual(input.Title, actual.Title);
             Assert.AreEqual(input.ActiveFrom, actual.ActiveFrom);
             Assert.AreEqual(input.ActiveTo, actual.ActiveTo);
+            Assert.AreEqual(input.RegistrationFrom, actual.RegistrationFrom);
+            Assert.AreEqual(input.RegistrationTo, actual.RegistrationTo);
             Assert.AreEqual(input.Description, actual.Description);
             Assert.AreEqual(input.CategoryId, actual.CategoryId);
             Assert.AreEqual(UpdateCommandResult.Ok, actual.Result);
