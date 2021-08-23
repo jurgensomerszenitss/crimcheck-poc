@@ -282,3 +282,4 @@ _Pvt_Extensions
 
 # MSBuild Binary and Structured Log
 *.binlog
+/.sonarqube

@@ -26,7 +26,7 @@ namespace Grader.Api.Business.Commands.CategoryUpdate
 
             entity.Name = request.Name;
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return entity.Adapt<CategoryUpdateCommandResult>();
         }

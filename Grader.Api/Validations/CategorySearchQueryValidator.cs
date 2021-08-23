@@ -3,7 +3,7 @@ using Grader.Api.Business.Queries.CategorySearch;
 
 namespace Grader.Api.Validations
 {
-    public class CategorySearchQueryValidator : AbstractValidator<CategorySearchQueryRequest>
+    public class CategorySearchQueryValidator : AbstractValidator<CategorySearchQuery>
     {
         public CategorySearchQueryValidator()
         {

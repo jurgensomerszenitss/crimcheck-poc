@@ -1,13 +1,14 @@
-﻿using Grader.Api.Business.Commands.CategoryCreate;
-using Grader.Api.Business.Commands.CategoryDelete;
-using Grader.Api.Business.Commands.CategoryUpdate;
+﻿using Grader.Api.Business.Commands.CourseCreate;
+using Grader.Api.Business.Commands.CourseDelete;
+using Grader.Api.Business.Commands.CourseUpdate;
 using Grader.Api.Business.Enums;
-using Grader.Api.Business.Queries.CategoryGet;
-using Grader.Api.Business.Queries.CategorySearch;
+using Grader.Api.Business.Queries.CourseGet;
+using Grader.Api.Business.Queries.CourseSearch;
 using Grader.Api.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,11 +16,9 @@ using System.Threading.Tasks;
 namespace Grader.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CategoryController : ControllerBase
+    public class CourseController : ControllerBase
     {
-        
-        public CategoryController(IMediator mediator)
+        public CourseController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -27,71 +26,90 @@ namespace Grader.Api.Controllers
         private readonly IMediator _mediator;
 
         /// <summary>
-        /// Searches a list of categories
+        /// Searches a list of courses for a category
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CategorySearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CourseSearchQueryResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpGet]
-        public async Task<IActionResult> SearchAsync([FromQuery] CategorySearchQuery request)
+        [HttpGet("category/{categoryId:long}/course")]
+        public async Task<IActionResult> SearchByCategoryAsync([FromRoute] long categoryId, [FromQuery] CourseSearchQuery request)
+        {
+                request.CategoryId = categoryId;
+                var result = await _mediator.Send(request);
+                return Ok(result);           
+        }
+
+        /// <summary>
+        /// Searches a list of courses
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(CourseSearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("course")]
+        public async Task<IActionResult> SearchAsync([FromQuery] CourseSearchQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
         /// <summary>
-        /// Get a category
+        /// Get a course
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CategorySearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CourseSearchQueryResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpGet("{id:long}")]
+        [HttpGet("course/{id:long}")]
         public async Task<IActionResult> GetAsync([FromRoute] long id)
         {
-            var request = new CategoryGetQuery { Id = id };
+            var request = new CourseGetQuery { Id = id };
             var result = await _mediator.Send(request);
             if (result == null) return NotFound();
             return Ok(result);
         }
 
         /// <summary>
-        /// Create a new category
+        /// Create a new course
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="categoryId"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(CourseCreateCommandResult), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CategoryCreateCommand request)
+        [HttpPost("category/{categoryId:long}/course")]
+        public async Task<IActionResult> CreateAsync([FromRoute] long categoryId, [FromBody] CourseCreateCommand request)
         {
+            request.CategoryId = categoryId;
             var result = await _mediator.Send(request);
-            return Created(new Uri($"/category/{result.Id}", UriKind.Relative), result);
+            return Created(new Uri($"/course/{result.Id}", UriKind.Relative), result);
         }
 
         /// <summary>
-        /// Update a category
+        /// Update a course
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="categoryId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(CategoryUpdateCommandResult), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType(typeof(CourseUpdateCommandResult), (int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpPut("{id:long}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] CategoryUpdateCommand request)
+        [HttpPut("category/{categoryId:long}/course/{id:long}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] long categoryId, [FromRoute] long id, [FromBody] CourseUpdateCommand request)
         {
             request.Id = id;
+            request.CategoryId = categoryId;
             var result = await _mediator.Send(request);
-            return Accepted(new Uri($"/category/{result.Id}", UriKind.Relative), result);
+            return Accepted(new Uri($"/Course/{result.Id}", UriKind.Relative), result);
         }
 
         /// <summary>
-        /// Delete a category
+        /// Delete a course
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -100,10 +118,10 @@ namespace Grader.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpDelete("{id:long}")]
+        [HttpDelete("course/{id:long}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
-            var request = new CategoryDeleteCommand { Id = id };
+            var request = new CourseDeleteCommand { Id = id };
             var result = await _mediator.Send(request);
             switch (result.Result)
             {

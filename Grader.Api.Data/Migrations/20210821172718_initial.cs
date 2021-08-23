@@ -78,10 +78,13 @@ namespace Grader.Api.Data.Migrations
                 name: "ix_lesson_course_id",
                 table: "lesson",
                 column: "course_id");
+
+            CustomUp(migrationBuilder);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            CustomDown(migrationBuilder);
             migrationBuilder.DropTable(
                 name: "lesson");
 
