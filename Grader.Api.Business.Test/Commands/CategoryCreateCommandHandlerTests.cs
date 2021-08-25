@@ -1,4 +1,9 @@
 ﻿using NUnit.Framework;
+using AutoFixture;
+using Grader.Api.Business.Commands.CategoryCreate;
+using Grader.Api.Data.Model;
+using NUnit.Framework;
+using System.Threading;
 
 namespace Grader.Api.Business.Test.Commands
 {
@@ -10,20 +15,20 @@ namespace Grader.Api.Business.Test.Commands
             CreateMockDbContext();
         }
 
-        //[Test]
-        //public void When_Handle()
-        //{
-        //    // assign
-        //    var input = Fixture.Create<CategoryCreateCommand>();
-        //    var sut = Fixture.Create<CategoryCreateCommandHandler>();
+        [Test]
+        public void When_Handle()
+        {
+            //// assign
+            //var input = Fixture.Create<CategoryCreateCommand>();
+            //var sut = Fixture.Create<CategoryCreateCommandHandler>();
 
-        //    // act
-        //    var actual = sut.Handle(input, CancellationToken.None).GetAwaiter().GetResult();
+            //// act
+            //var actual = sut.Handle(input, CancellationToken.None).GetAwaiter().GetResult();
 
-        //    // assert
-        //    Assert.NotNull(actual);
-        //    Assert.AreNotEqual(0, actual.Id);
-        //    Assert.AreEqual(input.Name, actual.Name);
-        //}
+            //// assert
+            //Assert.NotNull(actual);
+            //Assert.AreNotEqual(0, actual.Id);
+            //Assert.AreEqual(input.Name, actual.Name);
+        }
     }
 }
