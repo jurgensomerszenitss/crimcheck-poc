@@ -1,8 +1,8 @@
-﻿using Grader.Api.Data.Infrastructure;
-using Grader.Api.Data.Model;
+﻿using Grader.Api.Data.Model;
 using Grader.Api.Data.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations;
 using Serilog;
 using System;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace Grader.Api.Data.Context
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSnakeCaseNamingConvention();
 
-            optionsBuilder.ReplaceService<IMigrationsSqlGenerator, PostgresMigrationsGenerator>();
+            optionsBuilder.ReplaceService<IMigrationsSqlGenerator, ExtendedNpgsqlMigrationsSqlGenerator>();
         }
 
         public void Verify()

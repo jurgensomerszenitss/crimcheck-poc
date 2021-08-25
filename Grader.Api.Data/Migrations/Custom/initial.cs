@@ -1,5 +1,4 @@
-﻿using Grader.Api.Data.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Grader.Api.Data.Migrations
 {
