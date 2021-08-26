@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Grader.Api.Data\Grader.Api.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
 </Project>

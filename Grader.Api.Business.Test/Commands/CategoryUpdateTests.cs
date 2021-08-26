@@ -1,14 +1,16 @@
 ﻿using AutoFixture;
 using Grader.Api.Business.Commands.CategoryUpdate;
+using Grader.Api.Business.Enums;
 using Grader.Api.Data.Model;
+using Mapster;
 using NUnit.Framework;
 using System.Threading;
 
 namespace Grader.Api.Business.Test.Commands
 {
-    public class CategoryUpdateCommandHandlerTests : TestBase
+    public class CategoryUpdateTests : TestBase
     {
-        public CategoryUpdateCommandHandlerTests()
+        public CategoryUpdateTests()
         {
             InitMapTest();
             CreateMockDbContext();
@@ -31,5 +33,23 @@ namespace Grader.Api.Business.Test.Commands
             //Assert.AreNotEqual(0, actual.Id);
             //Assert.AreEqual(input.Name, actual.Name);
         }
+
+
+        [Test]
+        public void When_Map_Category_To_CategoryUpdateCommandResult()
+        {
+            // assign
+            var input = Fixture.Create<Category>();
+
+            // act
+            var actual = input.Adapt<CategoryUpdateCommandResult>();
+
+            // assert
+            Assert.NotNull(actual);
+            Assert.AreEqual(input.Id, actual.Id);
+            Assert.AreEqual(input.Name, actual.Name);
+            Assert.AreEqual(UpdateCommandResult.Ok, actual.Result);
+        }
+
     }
 }
