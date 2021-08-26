@@ -34,9 +34,22 @@ namespace Grader.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin()
+                        ;
+                    });
+            }); 
+
             services.AddOptions();
             services.AddMvc(options => { options.Filters.Add<LogExceptionFilter>(); });
-            services.AddRouting(options => { options.LowercaseUrls = true; options.LowercaseQueryStrings = true;  });
+            services.AddRouting(options => { options.LowercaseUrls = true; options.LowercaseQueryStrings = true; });
             services.AddControllers().AddNewtonsoftJson(ConfigureNewtonsoft);
             services.AddMediatR(typeof(Startup), typeof(Bootstrapper));
             services.AddSwaggerGen(ConfigureSwagger);
@@ -45,6 +58,8 @@ namespace Grader.Api
             services.AddBusiness(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(ConfigureJwt);
             services.AddAuthorization(options => options.DefinePolicies());
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +72,11 @@ namespace Grader.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Grader.Api v1"));
             }
 
+            app.UseCors(builder => builder.WithExposedHeaders("Content-Disposition")
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -67,6 +87,8 @@ namespace Grader.Api
             {
                 endpoints.MapControllers();
             });
+
+          
         }
 
         private void ConfigureNewtonsoft(MvcNewtonsoftJsonOptions options)
