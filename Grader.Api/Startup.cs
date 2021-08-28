@@ -58,8 +58,6 @@ namespace Grader.Api
             services.AddBusiness(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(ConfigureJwt);
             services.AddAuthorization(options => options.DefinePolicies());
-
-           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -102,10 +100,11 @@ namespace Grader.Api
 
             options.SchemaFilter<SwaggerExcludeFilter>();            
             options.SchemaFilter<JsonIgnoreBodyOperationFilter>();
-            options.OperationFilter<JsonIgnoreQueryOperationFilter>();
+            //options.OperationFilter<JsonIgnoreQueryOperationFilter>();
             options.OperationFilter<RemoveTagPrefixOperationFilter>();
             options.MapType<FileStreamResult>(() => new OpenApiSchema { Type = "file", });
-            
+            options.SchemaFilter<RequireValueTypePropertiesSchemaFilter>(/*camelCasePropertyNames:*/ true);
+
             var xmlPath = Path.Combine(System.AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
             options.IncludeXmlComments(xmlPath);
 
