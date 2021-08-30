@@ -3,6 +3,7 @@ using Grader.Api.Business.Commands.CategoryDelete;
 using Grader.Api.Business.Commands.CategoryImageUpload;
 using Grader.Api.Business.Commands.CategoryUpdate;
 using Grader.Api.Business.Enums;
+using Grader.Api.Business.Maps;
 using Grader.Api.Business.Queries.CategoryGet;
 using Grader.Api.Business.Queries.CategorySearch;
 using Grader.Api.Policies;
@@ -88,7 +89,7 @@ namespace Grader.Api.Controllers
                 var command = files[0].Adapt<CategoryImageUploadCommand>();
                 command.CategoryId = id;
                 await _mediator.Send(command);
-                return Ok();
+                return Created($"{Business.Environment.URI}/media/",null);
             }
             
             return BadRequest();

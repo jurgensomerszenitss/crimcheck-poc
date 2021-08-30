@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Grader.Api.Business;
+using Grader.Api.Business.Maps;
 using Grader.Api.Infrastructure;
 using Grader.Api.Policies;
 using Mapster;
@@ -20,6 +21,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Grader.Api
 {
@@ -78,6 +80,8 @@ namespace Grader.Api
             .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader());
+
+            app.UseUrlConversion();
 
             app.UseHttpsRedirection();
             app.UseRouting();
