@@ -7,7 +7,8 @@ namespace Grader.Api.Business.Queries.CategorySearch
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<Category, CategorySearchQueryResultCategory>();
+            config.NewConfig<Category, CategorySearchQueryResultCategory>()                
+                .Map(dest => dest.ImageUrl, src => src.Image != null ?  $"/media/{src.Image.Key}" : string.Empty);
         }
     }
 }

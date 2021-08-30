@@ -122,6 +122,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Grader.Api.Controllers.MediaController.GetAsync(System.String)">
+            <summary>
+            Get a category
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Grader.Api.Infrastructure.RequireValueTypePropertiesSchemaFilter">
             <summary>
             Makes all value-type properties "Required" in the schema docs, which is appropriate since they cannot be null.

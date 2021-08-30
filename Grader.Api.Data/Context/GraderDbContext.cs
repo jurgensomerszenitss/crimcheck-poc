@@ -14,7 +14,8 @@ namespace Grader.Api.Data.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
-      
+        public DbSet<Media> Media { get; set; }
+
         public GraderDbContext(DbContextOptions<GraderDbContext> options) : base(options)
         {
 
@@ -26,7 +27,8 @@ namespace Grader.Api.Data.Context
 
             modelBuilder.BuildCategoryModel()
                         .BuildCourseModel()
-                        .BuildLessonModel();
+                        .BuildLessonModel()
+                        .BuildMediaModel();
 
             base.OnModelCreating(modelBuilder);
         }

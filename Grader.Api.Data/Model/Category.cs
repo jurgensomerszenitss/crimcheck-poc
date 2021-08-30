@@ -7,6 +7,8 @@ namespace Grader.Api.Data.Model
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public long? ImageId { get; set; }
+        public virtual Media Image { get; set; }
 
         public NpgsqlTsVector SearchText { get; set; }
 

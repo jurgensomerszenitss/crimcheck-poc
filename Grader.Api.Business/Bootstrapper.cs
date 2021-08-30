@@ -9,7 +9,6 @@ namespace Grader.Api.Business
     {
         public static void AddBusiness(this IServiceCollection services, IConfiguration configuration)
         {
-            TypeAdapterConfig.GlobalSettings.Scan(typeof(Bootstrapper).Assembly);
             services.AddData(configuration);
         }
     }

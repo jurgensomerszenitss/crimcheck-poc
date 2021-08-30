@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Grader.Api.Business;
 using Grader.Api.Infrastructure;
 using Grader.Api.Policies;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,9 @@ namespace Grader.Api
             services.AddBusiness(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(ConfigureJwt);
             services.AddAuthorization(options => options.DefinePolicies());
+
+            TypeAdapterConfig.GlobalSettings.Scan(typeof(Startup).Assembly, typeof(Bootstrapper).Assembly);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,8 +89,6 @@ namespace Grader.Api
             {
                 endpoints.MapControllers();
             });
-
-          
         }
 
         private void ConfigureNewtonsoft(MvcNewtonsoftJsonOptions options)

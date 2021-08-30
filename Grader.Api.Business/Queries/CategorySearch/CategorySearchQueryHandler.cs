@@ -32,6 +32,7 @@ namespace Grader.Api.Business.Queries.CategorySearch
         private async Task<IEnumerable<Category>> GetItemsAsync(CategorySearchQuery request, CancellationToken cancellationToken)
         {
             return await _dbContext.Categories
+                    .Include(i => i.Image)
                     .WhereSearchText(request.SearchText)
                     .Page(request.Page, request.PageSize)
                     .ToListAsync(cancellationToken);

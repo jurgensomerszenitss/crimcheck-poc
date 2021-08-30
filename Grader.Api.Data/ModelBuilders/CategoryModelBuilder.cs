@@ -22,13 +22,15 @@ namespace Grader.Api.Data.ModelBuilders
         {
             entityTypeBuilder.Property(p => p.Name).IsRequired().HasMaxLength(100);
             entityTypeBuilder.Property(p => p.SearchText).ValueGeneratedOnAdd();
+            entityTypeBuilder.Property(p => p.ImageId).IsRequired(false);
 
             return entityTypeBuilder;
         }
 
 
         private static EntityTypeBuilder<Category> MapRelations(this EntityTypeBuilder<Category> entityTypeBuilder)
-        { 
+        {
+            entityTypeBuilder.HasOne(p => p.Image).WithMany().HasForeignKey(p => p.ImageId);
             return entityTypeBuilder;
         }
     }

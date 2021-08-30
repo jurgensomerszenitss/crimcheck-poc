@@ -26,6 +26,7 @@ namespace Grader.Api.Business.Test.Queries
             Assert.NotNull(actual);
             Assert.AreEqual(input.Id, actual.Id);
             Assert.AreEqual(input.Name, actual.Name);
+            Assert.AreEqual($"/media/{input.Image.Key}", actual.ImageUrl);
         }
 
 
