@@ -18,7 +18,6 @@ namespace Grader.Api.Data.Context
 
         public GraderDbContext(DbContextOptions<GraderDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,7 +35,7 @@ namespace Grader.Api.Data.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSnakeCaseNamingConvention();
+            optionsBuilder.UseSnakeCaseNamingConvention();            
 
             optionsBuilder.ReplaceService<IMigrationsSqlGenerator, ExtendedNpgsqlMigrationsSqlGenerator>();
         }

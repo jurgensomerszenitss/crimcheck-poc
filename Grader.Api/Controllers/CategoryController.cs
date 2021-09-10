@@ -48,7 +48,7 @@ namespace Grader.Api.Controllers
         /// Get a category
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CategorySearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CategoryGetQueryResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("{id:long}")]
