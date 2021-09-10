@@ -58,7 +58,7 @@ namespace Grader.Api.Controllers
         /// Get a course
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CourseSearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CourseGetQueryResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("course/{id:long}")]
