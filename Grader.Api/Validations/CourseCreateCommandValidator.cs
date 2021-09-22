@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Grader.Api.Business.Commands.CourseCreate;
+using Grader.Api.Business.Commands;
 
 namespace Grader.Api.Validations
 {
-    public class CourseCreateCommandValidator : AbstractValidator<CourseCreateCommand>
+    public class CourseCreateCommandValidator : AbstractValidator<CourseCreate.Command>
     {
         public CourseCreateCommandValidator()
         {

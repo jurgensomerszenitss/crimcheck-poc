@@ -1,14 +1,11 @@
-﻿using Grader.Api.Business.Commands.LessonCreate;
-using Grader.Api.Business.Commands.LessonDelete;
-using Grader.Api.Business.Commands.LessonUpdate;
+﻿
+using Grader.Api.Business.Commands;
 using Grader.Api.Business.Enums;
-using Grader.Api.Business.Queries.LessonGet;
-using Grader.Api.Business.Queries.LessonSearch;
+using Grader.Api.Business.Queries;
 using Grader.Api.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -29,14 +26,13 @@ namespace Grader.Api.Controllers
         /// Searches a list of lesons for a course
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(LessonSearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LessonSearch.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("course/{courseId:long}/Lesson")]
-        public async Task<IActionResult> SearchByCourseAsync([FromRoute] long courseId, [FromQuery] LessonSearchQuery request)
+        public async Task<IActionResult> SearchByCourseAsync([FromRoute] long courseId, [FromQuery] LessonSearch.Query request)
         {
-                request.CourseId = courseId;
-                var result = await _mediator.Send(request);
+                var result = await _mediator.Send(request with { CourseId = courseId });
                 return Ok(result);           
         }
 
@@ -44,11 +40,11 @@ namespace Grader.Api.Controllers
         /// Searches a list of Lessons
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(LessonSearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LessonSearch.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("Lesson")]
-        public async Task<IActionResult> SearchAsync([FromQuery] LessonSearchQuery request)
+        public async Task<IActionResult> SearchAsync([FromQuery] LessonSearch.Query request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -58,14 +54,13 @@ namespace Grader.Api.Controllers
         /// Get a Lesson
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(LessonGetQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LessonGet.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("lesson/{id:long}")]
         public async Task<IActionResult> GetAsync([FromRoute] long id)
         {
-            var request = new LessonGetQuery { Id = id };
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new LessonGet.Query(id));
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -77,15 +72,14 @@ namespace Grader.Api.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(LessonCreateCommandResult), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(long), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost("course/{courseId:long}/lesson")]
-        public async Task<IActionResult> CreateAsync([FromRoute] long courseId, [FromBody] LessonCreateCommand request)
+        public async Task<IActionResult> CreateAsync([FromRoute] long courseId, [FromBody] LessonCreate.Command request)
         {
-            request.CourseId = courseId;
-            var result = await _mediator.Send(request);
-            return Created(new Uri($"/lesson/{result.Id}", UriKind.Relative), result);
+            var result = await _mediator.Send(request with { CourseId = courseId });
+            return Created(new Uri($"/lesson/{result}", UriKind.Relative), result);
         }
 
         /// <summary>
@@ -96,16 +90,14 @@ namespace Grader.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(LessonUpdateCommandResult), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("course/{courseId:long}/lesson/{id:long}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] long courseId, [FromRoute] long id, [FromBody] LessonUpdateCommand request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] long courseId, [FromRoute] long id, [FromBody] LessonUpdate.Command request)
         {
-            request.Id = id;
-            request.CourseId  = courseId;
-            var result = await _mediator.Send(request);
-            return Accepted(new Uri($"/lesson/{result.Id}", UriKind.Relative), result);
+            var result = await _mediator.Send(request with { Id = id, CourseId = courseId });
+            return Accepted(new Uri($"/lesson/{id}", UriKind.Relative), result);
         }
 
         /// <summary>
@@ -121,9 +113,8 @@ namespace Grader.Api.Controllers
         [HttpDelete("lesson/{id:long}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
-            var request = new LessonDeleteCommand { Id = id };
-            var result = await _mediator.Send(request);
-            switch (result.Result)
+            var result = await _mediator.Send(new LessonDelete.Command(id));
+            switch (result)
             {
                 case DeleteCommandResult.NotAllowed: return Forbid();
                 case DeleteCommandResult.NotFound: return NotFound();

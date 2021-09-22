@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Grader.Api.Business.Queries.CategorySearch;
+using Grader.Api.Business.Queries;
 
 namespace Grader.Api.Validations
 {
-    public class CategorySearchQueryValidator : AbstractValidator<CategorySearchQuery>
+    public class CategorySearchQueryValidator : AbstractValidator<CategorySearch.Query>
     {
         public CategorySearchQueryValidator()
         {

@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using Grader.Api.Business.Queries.CategorySearch;
+using Grader.Api.Business.Queries;
 using Grader.Api.Data.Model;
 using Mapster;
 using NUnit.Framework;
@@ -14,13 +14,13 @@ namespace Grader.Api.Business.Test.Queries
         }
 
         [Test]
-        public void When_Map_Category_To_CategorySearchQueryResultCategory()
+        public void When_Map_Category_To_ResponseCategory()
         {
             // assign
             var input = Fixture.Create<Category>();
 
             // act
-            var actual = input.Adapt<CategorySearchQueryResultCategory>();
+            var actual = input.Adapt<CategorySearch.ResponseCategory>();
 
             // assert
             Assert.NotNull(actual);

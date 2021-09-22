@@ -142,7 +142,7 @@ namespace Grader.Api
                 });
 
 
-            options.CustomSchemaIds(i => i.Name);
+            options.CustomSchemaIds(SchemaNameResolver.GetSchemaName);
         }
 
 

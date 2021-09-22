@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
-using Grader.Api.Business.Commands.CategoryCreate;
-using Grader.Api.Business.Commands.LessonUpdate;
+using Grader.Api.Business.Commands;
 using Grader.Api.Business.Enums;
 using Grader.Api.Data.Model;
 using Mapster;
@@ -22,21 +21,20 @@ namespace Grader.Api.Business.Test.Commands
         }
 
         [Test]
-        public void When_Map_Lesson_To_LessonUpdateCommandResult()
+        public void When_Map_Command_To_Lesson()
         {
             // assign
-            var input = Fixture.Create<Lesson>();
+            var input = Fixture.Create<LessonUpdate.Command>();
 
             // act
-            var actual = input.Adapt<LessonUpdateCommandResult>();
+            var actual = input.Adapt<Lesson>();
 
             // assert
             Assert.NotNull(actual);
             Assert.AreEqual(input.Id, actual.Id);
             Assert.AreEqual(input.Topic, actual.Topic);
+            Assert.AreEqual(input.Description, actual.Description);
             Assert.AreEqual(input.CourseId, actual.CourseId);
-            Assert.AreEqual(UpdateCommandResult.Ok, actual.Result);
         }
-
     }
 }

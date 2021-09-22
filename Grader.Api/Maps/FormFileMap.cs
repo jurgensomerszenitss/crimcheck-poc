@@ -1,5 +1,4 @@
-﻿using Grader.Api.Business.Commands.CategoryImageUpload;
-using Mapster;
+﻿using Mapster;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;

@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using Grader.Api.Business.Commands.CategoryCreate;
+using Grader.Api.Business.Commands;
 using Grader.Api.Data.Model;
 using Mapster;
 using NUnit.Framework;
@@ -31,10 +31,10 @@ namespace Grader.Api.Business.Test.Commands
         }
 
         [Test]
-        public void When_Map_CategoryCreateCommand_To_Category()
+        public void When_Map_Command_To_Category()
         {
             // assign
-            var input = Fixture.Create<CategoryCreateCommand>();
+            var input = Fixture.Create<CategoryCreate.Command>();
 
             // act
             var actual = input.Adapt<Category>();
@@ -43,21 +43,7 @@ namespace Grader.Api.Business.Test.Commands
             Assert.NotNull(actual);
             Assert.AreEqual(input.Name, actual.Name);
         }
-
-        [Test]
-        public void When_Map_Category_To_CategoryCreateCommandResult()
-        {
-            // assign
-            var input = Fixture.Create<Category>();
-
-            // act
-            var actual = input.Adapt<CategoryCreateCommandResult>();
-
-            // assert
-            Assert.NotNull(actual);
-            Assert.AreEqual(input.Id, actual.Id);
-            Assert.AreEqual(input.Name, actual.Name);
-        }
+ 
 
     }
 }

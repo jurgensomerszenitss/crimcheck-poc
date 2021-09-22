@@ -4,7 +4,7 @@
         <name>Grader.Api</name>
     </assembly>
     <members>
-        <member name="M:Grader.Api.Controllers.CategoryController.SearchAsync(Grader.Api.Business.Queries.CategorySearch.CategorySearchQuery)">
+        <member name="M:Grader.Api.Controllers.CategoryController.SearchAsync(Grader.Api.Business.Queries.CategorySearch.Query)">
             <summary>
             Searches a list of categories
             </summary>
@@ -16,14 +16,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.CategoryController.CreateAsync(Grader.Api.Business.Commands.CategoryCreate.CategoryCreateCommand)">
+        <member name="M:Grader.Api.Controllers.CategoryController.CreateAsync(Grader.Api.Business.Commands.CategoryCreate.Command)">
             <summary>
             Create a new category
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.CategoryController.UpdateAsync(System.Int64,Grader.Api.Business.Commands.CategoryUpdate.CategoryUpdateCommand)">
+        <member name="M:Grader.Api.Controllers.CategoryController.UpdateAsync(System.Int64,Grader.Api.Business.Commands.CategoryUpdate.Command)">
             <summary>
             Update a category
             </summary>
@@ -38,13 +38,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.CourseController.SearchByCategoryAsync(System.Int64,Grader.Api.Business.Queries.CourseSearch.CourseSearchQuery)">
+        <member name="M:Grader.Api.Controllers.CourseController.SearchByCategoryAsync(System.Int64,Grader.Api.Business.Queries.CourseSearch.Query)">
             <summary>
             Searches a list of courses for a category
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.CourseController.SearchAsync(Grader.Api.Business.Queries.CourseSearch.CourseSearchQuery)">
+        <member name="M:Grader.Api.Controllers.CourseController.SearchAsync(Grader.Api.Business.Queries.CourseSearch.Query)">
             <summary>
             Searches a list of courses
             </summary>
@@ -56,7 +56,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.CourseController.CreateAsync(System.Int64,Grader.Api.Business.Commands.CourseCreate.CourseCreateCommand)">
+        <member name="M:Grader.Api.Controllers.CourseController.CreateAsync(System.Int64,Grader.Api.Business.Commands.CourseCreate.Command)">
             <summary>
             Create a new course
             </summary>
@@ -64,7 +64,7 @@
             <param name="categoryId"></param>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.CourseController.UpdateAsync(System.Int64,System.Int64,Grader.Api.Business.Commands.CourseUpdate.CourseUpdateCommand)">
+        <member name="M:Grader.Api.Controllers.CourseController.UpdateAsync(System.Int64,System.Int64,Grader.Api.Business.Commands.CourseUpdate.Command)">
             <summary>
             Update a course
             </summary>
@@ -80,13 +80,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.LessonController.SearchByCourseAsync(System.Int64,Grader.Api.Business.Queries.LessonSearch.LessonSearchQuery)">
+        <member name="M:Grader.Api.Controllers.LessonController.SearchByCourseAsync(System.Int64,Grader.Api.Business.Queries.LessonSearch.Query)">
             <summary>
             Searches a list of lesons for a course
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.LessonController.SearchAsync(Grader.Api.Business.Queries.LessonSearch.LessonSearchQuery)">
+        <member name="M:Grader.Api.Controllers.LessonController.SearchAsync(Grader.Api.Business.Queries.LessonSearch.Query)">
             <summary>
             Searches a list of Lessons
             </summary>
@@ -98,7 +98,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.LessonController.CreateAsync(System.Int64,Grader.Api.Business.Commands.LessonCreate.LessonCreateCommand)">
+        <member name="M:Grader.Api.Controllers.LessonController.CreateAsync(System.Int64,Grader.Api.Business.Commands.LessonCreate.Command)">
             <summary>
             Create a new Lesson
             </summary>
@@ -106,7 +106,7 @@
             <param name="courseId"></param>
             <returns></returns>
         </member>
-        <member name="M:Grader.Api.Controllers.LessonController.UpdateAsync(System.Int64,System.Int64,Grader.Api.Business.Commands.LessonUpdate.LessonUpdateCommand)">
+        <member name="M:Grader.Api.Controllers.LessonController.UpdateAsync(System.Int64,System.Int64,Grader.Api.Business.Commands.LessonUpdate.Command)">
             <summary>
             Update a Lesson
             </summary>

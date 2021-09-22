@@ -1,11 +1,6 @@
-﻿using Grader.Api.Business.Commands.CategoryCreate;
-using Grader.Api.Business.Commands.CategoryDelete;
-using Grader.Api.Business.Commands.CategoryImageUpload;
-using Grader.Api.Business.Commands.CategoryUpdate;
+﻿using Grader.Api.Business.Commands;
 using Grader.Api.Business.Enums;
-using Grader.Api.Business.Maps;
-using Grader.Api.Business.Queries.CategoryGet;
-using Grader.Api.Business.Queries.CategorySearch;
+using Grader.Api.Business.Queries;
 using Grader.Api.Policies;
 using Mapster;
 using MediatR;
@@ -13,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -34,11 +30,11 @@ namespace Grader.Api.Controllers
         /// Searches a list of categories
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CategorySearchQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CategorySearch.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> SearchAsync([FromQuery] CategorySearchQuery request)
+        public async Task<IActionResult> SearchAsync([FromQuery] CategorySearch.Query request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -48,14 +44,13 @@ namespace Grader.Api.Controllers
         /// Get a category
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(CategoryGetQueryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CategoryGet.Response), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetAsync([FromRoute] long id)
         {
-            var request = new CategoryGetQuery { Id = id };
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new CategoryGet.Query(id));
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -66,14 +61,14 @@ namespace Grader.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(CategoryCreateCommandResult), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(long), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] CategoryCreateCommand request)
+        public async Task<IActionResult> CreateAsync([FromBody] CategoryCreate.Command request)
         {          
             var result = await _mediator.Send(request);
-            return Created(new Uri($"/category/{result.Id}", UriKind.Relative), result);
+            return Created(new Uri($"/category/{result}", UriKind.Relative), result);
         }
 
         [Authorize(Policy = PolicyNames.ADMIN)]
@@ -86,8 +81,17 @@ namespace Grader.Api.Controllers
             var files = Request.Form.Files;
             if (files.Count > 0)
             {
-                var command = files[0].Adapt<CategoryImageUploadCommand>();
-                command.CategoryId = id;
+                var file = files.First();
+
+                var memoryStream = new MemoryStream();
+                file.CopyTo(memoryStream);
+                var content = memoryStream.ToArray();
+
+                var command = new CategoryImageUpload.Command ( id,
+                    Path.GetFileNameWithoutExtension(file.FileName).ToLower(),
+                    Path.GetExtension(file.FileName).ToLower().TrimStart('.'),
+                    Guid.NewGuid().ToString(),
+                    content);
                 await _mediator.Send(command);
                 return Created($"{Business.Environment.URI}/media/",null);
             }
@@ -103,15 +107,14 @@ namespace Grader.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [Authorize(Policy = PolicyNames.ADMIN)]
-        [ProducesResponseType(typeof(CategoryUpdateCommandResult), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id:long}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] CategoryUpdateCommand request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] CategoryUpdate.Command request)
         {
-            request.Id = id;
-            var result = await _mediator.Send(request);
-            return Accepted(new Uri($"/category/{result.Id}", UriKind.Relative), result);
+            var result = await _mediator.Send(request with { Id = id });
+            return Accepted(new Uri($"/category/{id}", UriKind.Relative));
         }
 
         /// <summary>
@@ -127,9 +130,8 @@ namespace Grader.Api.Controllers
         [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
-            var request = new CategoryDeleteCommand { Id = id };
-            var result = await _mediator.Send(request);
-            switch (result.Result)
+            var result = await _mediator.Send(new CategoryDelete.Command(id));
+            switch (result)
             {
                 case DeleteCommandResult.NotAllowed: return Forbid();
                 case DeleteCommandResult.NotFound: return NotFound();

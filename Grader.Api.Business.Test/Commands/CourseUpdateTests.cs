@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using Grader.Api.Business.Commands.CourseUpdate;
+using Grader.Api.Business.Commands;
 using Grader.Api.Business.Enums;
 using Grader.Api.Data.Model;
 using Mapster;
@@ -16,13 +16,13 @@ namespace Grader.Api.Business.Test.Commands
         }
 
         [Test]
-        public void When_Map_Course_To_CourseUpdateCommandResult()
+        public void When_Map_Command_To_Course()
         {
             // assign
-            var input = Fixture.Create<Course>();
+            var input = Fixture.Create<CourseUpdate.Command>();
 
             // act
-            var actual = input.Adapt<CourseUpdateCommandResult>();
+            var actual = input.Adapt<Course>();
 
             // assert
             Assert.NotNull(actual);
@@ -33,7 +33,6 @@ namespace Grader.Api.Business.Test.Commands
             Assert.AreEqual(input.RegistrationTo, actual.RegistrationTo);
             Assert.AreEqual(input.Description, actual.Description);
             Assert.AreEqual(input.CategoryId, actual.CategoryId);
-            Assert.AreEqual(UpdateCommandResult.Ok, actual.Result);
         }
 
     }

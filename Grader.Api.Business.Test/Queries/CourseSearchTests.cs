@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using Grader.Api.Business.Queries.CourseSearch;
+using Grader.Api.Business.Queries;
 using Grader.Api.Data.Model;
 using Mapster;
 using NUnit.Framework;
@@ -14,13 +14,13 @@ namespace Grader.Api.Business.Test.Queries
         }
 
         [Test]
-        public void When_Map_Course_To_CourseSearchQueryResultCourse()
+        public void When_Map_Course_To_ResponseCourse()
         {
             // assign
             var input = Fixture.Create<Course>();
 
             // act
-            var actual = input.Adapt<CourseSearchQueryResultCourse>();
+            var actual = input.Adapt<CourseSearch.ResponseCourse>();
 
             // assert
             Assert.NotNull(actual);

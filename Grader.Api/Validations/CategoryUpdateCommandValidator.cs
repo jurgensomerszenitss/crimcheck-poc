@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Grader.Api.Business.Commands.CategoryUpdate;
+using Grader.Api.Business.Commands;
 
 namespace Grader.Api.Validations
 {
-    public class CategoryUpdateCommandValidator : AbstractValidator<CategoryUpdateCommand>
+    public class CategoryUpdateCommandValidator : AbstractValidator<CategoryUpdate.Command>
     {
         public CategoryUpdateCommandValidator()
         {

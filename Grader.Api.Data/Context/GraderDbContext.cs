@@ -1,5 +1,5 @@
-﻿using Grader.Api.Data.Model;
-using Grader.Api.Data.ModelBuilders;
+﻿using Grader.Api.Data.Configuration;
+using Grader.Api.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Migrations;
@@ -24,10 +24,10 @@ namespace Grader.Api.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.BuildCategoryModel()
-                        .BuildCourseModel()
-                        .BuildLessonModel()
-                        .BuildMediaModel();
+            modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration())
+                .ApplyConfiguration(new CourseEntityConfiguration())
+                .ApplyConfiguration(new LessonEntityConfiguration())
+                .ApplyConfiguration(new MediaEntityConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
